@@ -3,12 +3,12 @@ import {
   HardHat,
   Recycle,
   ShieldCheck,
-  ShieldAlert,
   Phone,
   Truck,
   Wrench,
   Sparkles,
-  CheckCircle2
+  CheckCircle2,
+  Tag
 } from "lucide-react";
 
 export const COMPANY = {
@@ -61,13 +61,13 @@ export const SERVICES = [
   },
   {
     title: "Safe & Insured",
-    description: "Your property is in good hands.",
+    description: "Fully licensed, insured, and reliable.",
     Icon: ShieldCheck
   },
   {
-    title: "Safety First",
-    description: "Fully licensed, insured, and reliable.",
-    Icon: ShieldAlert
+    title: "Free Estimates",
+    description: "No-obligation quotes, fast turnaround.",
+    Icon: Tag
   }
 ];
 

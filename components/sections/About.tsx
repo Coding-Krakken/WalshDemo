@@ -27,7 +27,7 @@ export default function About() {
             clean and ready for the next phase.
           </p>
           <a href="#contact" className="cta-button mt-8">
-            Learn More
+            Get A Free Quote
           </a>
         </SectionReveal>
       </div>

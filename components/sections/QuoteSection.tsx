@@ -2,32 +2,59 @@
 
 import { FormEvent, useState } from "react";
 import Image from "next/image";
-import { CheckCircle2, PhoneCall } from "lucide-react";
+import { CheckCircle2, PhoneCall, Loader2 } from "lucide-react";
 import { COMPANY, IMAGES } from "@/lib/constants";
 
 export default function QuoteSection() {
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const form = event.currentTarget;
     const data = new FormData(form);
+
     const honey = String(data.get("website") || "");
-    if (honey) {
-      return;
-    }
+    if (honey) return;
 
     const name = String(data.get("name") || "").trim();
     const email = String(data.get("email") || "").trim();
+    const phone = String(data.get("phone") || "").trim();
     const details = String(data.get("details") || "").trim();
+
     if (!name || !email || !details) {
-      setStatus("Please fill out all required fields.");
+      setErrorMsg("Please fill out all required fields.");
+      setStatus("error");
       return;
     }
 
-    setStatus("Thanks. Your quote request has been sent.");
-    form.reset();
+    setStatus("submitting");
+    setErrorMsg("");
+
+    try {
+      const res = await fetch("/api/quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, details })
+      });
+
+      const json = await res.json();
+
+      if (!res.ok || !json.ok) {
+        setErrorMsg(json.error ?? "Something went wrong. Please try again.");
+        setStatus("error");
+        return;
+      }
+
+      setStatus("success");
+      form.reset();
+    } catch {
+      setErrorMsg("Network error. Please check your connection and try again.");
+      setStatus("error");
+    }
   };
+
+  const isSubmitting = status === "submitting";
 
   return (
     <section id="contact" className="border-t border-hazard/50 bg-[#0d0d0d]">
@@ -48,20 +75,58 @@ export default function QuoteSection() {
           <h3 className="font-heading text-[clamp(3rem,6.3vw,4.2rem)] uppercase leading-none">Get A Free Quote</h3>
           <form className="mt-4 grid gap-2.5" onSubmit={onSubmit}>
             <input type="text" name="website" className="hidden" tabIndex={-1} autoComplete="off" />
-            <input name="name" placeholder="Name" required className="rounded border border-black/25 bg-white px-4 py-2.5 text-sm outline-none" />
-            <input name="phone" placeholder="Phone" className="rounded border border-black/25 bg-white px-4 py-2.5 text-sm outline-none" />
-            <input name="email" type="email" placeholder="Email" required className="rounded border border-black/25 bg-white px-4 py-2.5 text-sm outline-none" />
+            <input
+              name="name"
+              placeholder="Name *"
+              required
+              disabled={isSubmitting}
+              className="rounded border border-black/25 bg-white px-4 py-2.5 text-sm outline-none disabled:opacity-60"
+            />
+            <input
+              name="phone"
+              placeholder="Phone"
+              disabled={isSubmitting}
+              className="rounded border border-black/25 bg-white px-4 py-2.5 text-sm outline-none disabled:opacity-60"
+            />
+            <input
+              name="email"
+              type="email"
+              placeholder="Email *"
+              required
+              disabled={isSubmitting}
+              className="rounded border border-black/25 bg-white px-4 py-2.5 text-sm outline-none disabled:opacity-60"
+            />
             <textarea
               name="details"
-              placeholder="Project Details"
+              placeholder="Project Details *"
               required
               rows={3}
-              className="rounded border border-black/25 bg-white px-4 py-2.5 text-sm outline-none"
+              disabled={isSubmitting}
+              className="rounded border border-black/25 bg-white px-4 py-2.5 text-sm outline-none disabled:opacity-60"
             />
-            <button type="submit" className="rounded bg-black px-5 py-1.5 font-heading text-[1.8rem] uppercase tracking-wide text-white">
-              Send Request
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="inline-flex items-center justify-center gap-2 rounded bg-black px-5 py-1.5 font-heading text-[1.8rem] uppercase tracking-wide text-white disabled:opacity-70"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Sending…
+                </>
+              ) : (
+                "Send Request"
+              )}
             </button>
-            {status ? <p className="text-sm font-semibold uppercase tracking-wide">{status}</p> : null}
+            {status === "success" && (
+              <p className="flex items-center gap-1.5 text-sm font-semibold uppercase tracking-wide">
+                <CheckCircle2 className="h-4 w-4" />
+                Thanks! Your quote request has been sent.
+              </p>
+            )}
+            {status === "error" && errorMsg && (
+              <p className="text-sm font-semibold uppercase tracking-wide text-red-700">{errorMsg}</p>
+            )}
           </form>
         </div>
 

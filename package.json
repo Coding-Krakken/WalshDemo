@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "next dev",
+    "dev:admin-sidecar": "ADMIN_PUBLIC_BASE_PATH=${ADMIN_PUBLIC_BASE_PATH:-/admin} ADMIN_BUSINESS_PROFILE=${ADMIN_BUSINESS_PROFILE:-generic} ADMIN_AUTH_PROVIDER=${ADMIN_AUTH_PROVIDER:-memory} ADMIN_AUTH_USER_ID=${ADMIN_AUTH_USER_ID:-dev-admin} ADMIN_AUTH_ROLE=${ADMIN_AUTH_ROLE:-admin} ADMIN_AUTH_EMAIL=${ADMIN_AUTH_EMAIL:-admin@localhost} npm --prefix admin-dashboard/apps/starter-next run dev -- --port 4100",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -17,6 +18,10 @@
   "private": "true",
   "dependencies": {
     "@gsap/react": "^2.1.2",
+    "@universal-admin/adapters": "file:admin-dashboard/packages/adapters",
+    "@universal-admin/core": "file:admin-dashboard/packages/core",
+    "@universal-admin/theming": "file:admin-dashboard/packages/theming",
+    "@universal-admin/ui": "file:admin-dashboard/packages/ui",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.6.0",
     "framer-motion": "^12.40.0",

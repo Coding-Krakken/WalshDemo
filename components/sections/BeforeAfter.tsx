@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { ChevronsLeftRight } from "lucide-react";
 import { IMAGES } from "@/lib/constants";
 
 export default function BeforeAfter() {
@@ -17,8 +18,11 @@ export default function BeforeAfter() {
           <div className="absolute inset-y-0 left-0 overflow-hidden" style={{ width: `${position}%` }}>
             <Image src={IMAGES.after} alt="After cleanup and prep" fill className="object-cover" sizes="100vw" />
           </div>
-          <div className="absolute inset-y-0" style={{ left: `${position}%` }}>
-            <div className="h-full w-1 bg-hazard" />
+          <div className="pointer-events-none absolute inset-y-0 flex items-center" style={{ left: `${position}%` }}>
+            <div className="h-full w-0.5 bg-hazard" />
+            <div className="absolute flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border-2 border-hazard bg-black text-hazard shadow-lg">
+              <ChevronsLeftRight className="h-5 w-5" />
+            </div>
           </div>
         </div>
         <input

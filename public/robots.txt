@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://walsh-demo.vercel.app/sitemap.xml
