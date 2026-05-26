@@ -1,4 +1,4 @@
-import { BadgeCheck, Facebook, Instagram, Youtube, Mail } from "lucide-react";
+import { BadgeCheck, Facebook, Instagram, Youtube as YoutubeIcon, Mail } from "lucide-react";
 import Link from "next/link";
 import { COMPANY, NAV_LINKS } from "@/lib/constants";
 
@@ -42,7 +42,7 @@ export default function Footer() {
               <Instagram className="h-4 w-4" />
             </Link>
             <Link href="https://youtube.com" target="_blank" rel="noopener noreferrer" aria-label="YouTube" className="rounded-full border border-white/20 p-2 hover:border-hazard hover:text-hazard">
-              <Youtube className="h-4 w-4" />
+              <YoutubeIcon className="h-4 w-4" />
             </Link>
           </div>
         </div>
